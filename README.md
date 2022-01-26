@@ -10,7 +10,8 @@ curl https://raw.githubusercontent.com/VBPROGER/pyeasyclean/main/pyeasyclean > ~
 ```
 ~/pyeasyclean
 ```
-NOTE: This program is made by VBPROGER and licensed with MIT license.
+# Notice!
+NOTICE! This program is made by VBPROGER (me) and licensed with MIT license.
 If you will copy / edit my program, please insert comment with link to this project
 and my username.
 Example:
