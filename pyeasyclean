@@ -1,0 +1,77 @@
+#!/usr/bin/python3
+"""
+MIT License
+
+Copyright (c) 2022 VB PROGER
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+"""
+
+import argparse, os, shutil
+
+def cls():
+    os.system('clear || cls || :')
+def scan(folder_path: str):
+    files_found = 0
+    removed_files = 0
+    failed_to_remove = 0
+    for file in os.listdir(str(folder_path)):
+        if file.startswith('xapp-tmp-') or file.startswith('.com.google.') or file.startswith('ssh-') or file.startswith('mintUpdate') or file.startswith('config-err-') or file.startswith('flatpak-cache-') or file.startswith('ssh') or file.startswith('hsperfdata_'):
+            file = str(file)
+            print('Found unused file: '+file)
+            print('Deleting file: '+file)
+            try:
+                try:
+                    os.remove(str(folder_path)+'/'+file)
+                    print('Deleted file: '+file)
+                except IsADirectoryError:
+                    shutil.rmtree(str(folder_path)+'/'+file, ignore_errors=True)
+                    print('Deleted folder: '+file)
+                removed_files =+ 1
+            except Exception as e:
+                print('Failed to delete file: '+file)
+                print('Error code: '+str(e))
+                failed_to_remove =+ 1
+            files_found =+ 1
+    return files_found, removed_files, failed_to_remove
+def scan_tmp_folders():
+    files_found = 0
+    removed_files = 0
+    files_found, removed_files, failed_to_remove = scan('/tmp')
+    files_found, removed_files, failed_to_remove = scan('/var/tmp')
+    files_found, removed_files, failed_to_remove = scan('/etc/tmpfiles.d')
+    files_found, removed_files, failed_to_remove = scan('/run/log')
+    if files_found != 0 or removed_files != 0 or failed_to_remove != 0:
+        print('Found '+str(files_found)+' file(s) / folder(s), '+str(removed_files)+' file(s) / folder(s) removed, and '+str(failed_to_remove)+' file(s) failed to remove.')
+    else:
+        print('Nothing found to remove. Your PC is cleaned!')
+
+description='''PyEasyClean is advanched tool\n
+to clear your cache and heal computer.'''
+parser = argparse.ArgumentParser(description=description)
+parser.add_argument("-clean", help = "Clears unused things from TMP folder", required=False, type=str)
+parser.add_argument("-cls", help = "Clears console", required=False)
+args = parser.parse_args()
+if args.clean:
+    print("Scanning & cleaning tmp all folders...")
+    scan_tmp_folders()
+elif args.cls:
+    cls()
+else:
+    parser.print_help()
