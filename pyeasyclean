@@ -41,7 +41,7 @@ def scan(folder_path: str):
     removed_files = 0
     failed_to_remove = 0
     for file in os.listdir(str(folder_path)):
-        if file.startswith('xapp-tmp-') or file.startswith('.com.google.') or file.startswith('ssh-') or file.startswith('mintUpdate') or file.startswith('config-err-') or file.startswith('flatpak-cache-') or file.startswith('ssh') or file.startswith('hsperfdata_') or file.startswith('ksycoca') or file.startswith('.fr-'):
+        if file.startswith('xapp-tmp-') or file.startswith('.com.google.') or file.startswith('ssh-') or file.startswith('mintUpdate') or file.startswith('config-err-') or file.startswith('flatpak-cache-') or file.startswith('ssh') or file.startswith('hsperfdata_') or file.startswith('ksycoca') or file.startswith('.fr-') or file.startswith('plasma_') or file.startswith('.flatpak') or file.startswith('mozilla') or file.startswith('mc') or file.startswith('thumbnails'):
             file = str(file)
             print('Found unused file: '+file)
             print('Deleting file: '+file)
