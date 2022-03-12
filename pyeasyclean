@@ -41,7 +41,7 @@ def scan(folder_path: str):
     removed_files = 0
     failed_to_remove = 0
     for file in os.listdir(str(folder_path)):
-        if file.startswith('xapp-tmp-') or file.startswith('.com.google.') or file.startswith('ssh-') or file.startswith('mintUpdate') or file.startswith('config-err-') or file.startswith('flatpak-cache-') or file.startswith('ssh') or file.startswith('hsperfdata_') or file.startswith('ksycoca') or file.startswith('.fr-') or file.startswith('plasma_') or file.startswith('.flatpak') or file.startswith('mozilla') or file.startswith('mc') or file.startswith('thumbnails'):
+        if file.startswith('xapp-tmp-') or file.startswith('.com.google.') or file.startswith('ssh-') or file.startswith('mintUpdate') or file.startswith('config-err-') or file.startswith('flatpak-cache-') or file.startswith('ssh') or file.startswith('hsperfdata_') or file.startswith('ksycoca') or file.startswith('.fr-') or file.startswith('plasma_') or file.startswith('.flatpak') or file.startswith('mozilla') or file.startswith('mc') or file.startswith('thumbnails') or file.startswith('pip') or file.startswith('mesa_shader') or file.startswith('fontconfig') or file.startswith('dbus'):
             file = str(file)
             print('Found unused file: '+file)
             print('Deleting file: '+file)
@@ -75,8 +75,8 @@ def scan_tmp_folders():
 description='''PyEasyClean is advanched tool\n
 to clear your cache and heal computer.'''
 parser = argparse.ArgumentParser(description=description)
-parser.add_argument("-clean", help = "Clears unused things from TMP folder", required=False, type=str)
-parser.add_argument("-cls", help = "Clears console", required=False)
+parser.add_argument("-clean", help = "Clears unused things from temporary and cache folder(s)", required=False, type=str, nargs="*")
+parser.add_argument("-cls", help = "Clears console", required=False, nargs="*")
 args = parser.parse_args()
 if args.clean:
     print("Scanning & cleaning tmp all folders...")
