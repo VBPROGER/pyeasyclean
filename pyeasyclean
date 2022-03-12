@@ -62,11 +62,15 @@ def scan(folder_path: str):
 def scan_tmp_folders():
     files_found = 0
     removed_files = 0
-    files_found, removed_files, failed_to_remove = scan('/tmp')
-    files_found, removed_files, failed_to_remove = scan('/var/tmp')
-    files_found, removed_files, failed_to_remove = scan('/etc/tmpfiles.d')
-    files_found, removed_files, failed_to_remove = scan('/run/log')
-    files_found, removed_files, failed_to_remove = scan(f'/home/{str(getpass.getuser())}/.cache')
+    try:
+        files_found, removed_files, failed_to_remove = scan('/tmp')
+        files_found, removed_files, failed_to_remove = scan('/var/tmp')
+        files_found, removed_files, failed_to_remove = scan('/etc/tmpfiles.d')
+        files_found, removed_files, failed_to_remove = scan('/run/log')
+        files_found, removed_files, failed_to_remove = scan(f'/home/{str(getpass.getuser())}/.cache')
+        files_found, removed_files, failed_to_remove = scan(f'/root/.cache')
+    except BaseException:
+        pass
     if files_found != 0 or removed_files != 0 or failed_to_remove != 0:
         print('Found '+str(files_found)+' file(s) / folder(s), '+str(removed_files)+' file(s) / folder(s) removed, and '+str(failed_to_remove)+' file(s) failed to remove.')
     else:
