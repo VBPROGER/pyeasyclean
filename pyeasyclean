@@ -34,6 +34,21 @@ except BaseException:
     print('Error!')
     exit(2)
 
+def checkblacklist(file: str):
+    zzzz = [
+    'xapp-tmp-', '.com.google.',
+    'ssh-', 'mintUpdate', 'config-err-'
+    'xapp-tmp-', '.com.google.', 'ssh-',
+    'flatpak-cache-', 'hsperfdata_',
+    'ksycoca', '.fr-', 'plasma_',
+    '.flatpak', 'mozilla', 'mc', 'thumbnails',
+    'pip', 'mesa_shader', 'fontconfig', 'dbus',
+    'meow.bak' # New!
+    ]
+    for x in zzzz:
+        if str(file).startswith(str(x)): return True
+    return False
+
 def cls():
     os.system('clear || cls || :')
 def scan(folder_path: str):
@@ -41,7 +56,7 @@ def scan(folder_path: str):
     removed_files = 0
     failed_to_remove = 0
     for file in os.listdir(str(folder_path)):
-        if file.startswith('xapp-tmp-') or file.startswith('.com.google.') or file.startswith('ssh-') or file.startswith('mintUpdate') or file.startswith('config-err-') or file.startswith('flatpak-cache-') or file.startswith('ssh') or file.startswith('hsperfdata_') or file.startswith('ksycoca') or file.startswith('.fr-') or file.startswith('plasma_') or file.startswith('.flatpak') or file.startswith('mozilla') or file.startswith('mc') or file.startswith('thumbnails') or file.startswith('pip') or file.startswith('mesa_shader') or file.startswith('fontconfig') or file.startswith('dbus'):
+        if checkblacklist(file):
             file = str(file)
             print('Found unused file: '+file)
             print('Deleting file: '+file)
