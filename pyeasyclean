@@ -30,8 +30,8 @@ try:
 except ImportError:
     print('Library importion error, "getpass", "shutil" and "argparse" are required lib(s)!')
     exit(1)
-except BaseException:
-    print('Error!')
+except BaseException as e:
+    print('Error!\nCode: {}'.format(str(e)))
     exit(2)
 
 def checkblacklist(file: str):
@@ -43,7 +43,7 @@ def checkblacklist(file: str):
     'ksycoca', '.fr-', 'plasma_',
     '.flatpak', 'mozilla', 'mc', 'thumbnails',
     'pip', 'mesa_shader', 'fontconfig', 'dbus',
-    'meow.bak' # New!
+    'meow.bak', # New!
     ]
     for x in zzzz:
         if str(file).startswith(str(x)): return True
@@ -58,19 +58,19 @@ def scan(folder_path: str):
     for file in os.listdir(str(folder_path)):
         if checkblacklist(file):
             file = str(file)
-            print('Found unused file: '+file)
-            print('Deleting file: '+file)
+            print('Found unused file: ' + file)
+            print('Deleting file: ' + file)
             try:
                 try:
-                    os.remove(str(folder_path)+'/'+file)
-                    print('Deleted file: '+file)
+                    os.remove(str(folder_path) + '/' + file)
+                    print('Deleted file: ' + file)
                 except IsADirectoryError:
-                    shutil.rmtree(str(folder_path)+'/'+file, ignore_errors=True)
-                    print('Deleted folder: '+file)
+                    shutil.rmtree(str(folder_path) + '/' + file, ignore_errors = True)
+                    print('Deleted folder: ' + file)
                 removed_files =+ 1
-            except Exception as e:
-                print('Failed to delete file: '+file)
-                print('Error code: '+str(e))
+            except BaseException as e:
+                print('Failed to delete file: ' + file)
+                print('Error code: ' + str(e))
                 failed_to_remove =+ 1
             files_found =+ 1
     return files_found, removed_files, failed_to_remove
@@ -83,7 +83,8 @@ def scan_tmp_folders():
         files_found, removed_files, failed_to_remove = scan('/etc/tmpfiles.d')
         files_found, removed_files, failed_to_remove = scan('/run/log')
         files_found, removed_files, failed_to_remove = scan(f'/home/{str(getpass.getuser())}/.cache')
-        files_found, removed_files, failed_to_remove = scan(f'/root/.cache')
+        files_found, removed_files, failed_to_remove = scan('/var/cache')
+        files_found, removed_files, failed_to_remove = scan('/root/.cache')
     except BaseException:
         pass
     if files_found != 0 or removed_files != 0 or failed_to_remove != 0:
@@ -94,10 +95,14 @@ def scan_tmp_folders():
 description='''PyEasyClean is advanched tool\n
 to clear your cache and heal computer.'''
 parser = argparse.ArgumentParser(description=description)
-parser.add_argument("-clean", help = "Clears unused things from temporary and cache folder(s)", required=False, type=str, nargs="*")
-parser.add_argument("-cls", help = "Clears console", required=False, nargs="*")
+parser.add_argument("-clean", help = "Clears unused things from temporary and cache folder(s)", required = False, type = str, nargs = "*")
+parser.add_argument("-cls", help = "Clears console", required = False, nargs = "*")
 args = parser.parse_args()
-if args.clean:
+if args.clean and args.cls:
+    cls()
+    print('Console cleared!')
+    scan_tmp_folders()
+elif args.clean:
     print("Scanning & cleaning tmp all folders...")
     scan_tmp_folders()
 elif args.cls:
